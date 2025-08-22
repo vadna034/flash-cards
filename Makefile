@@ -2,7 +2,7 @@
 CXX := g++
 CPPFLAGS :=        
 CXXFLAGS := -MMD -MP -Wall -g
-LDLIBS := -lncurses
+LDLIBS := -lncurses -lsqlite3
 
 TARGET := main
 SOURCES := $(wildcard *.cpp) $(wildcard */*.cpp)
