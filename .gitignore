@@ -4,3 +4,6 @@
 *.drawio*
 
 main
+
+.cache/
+compile_commands.json

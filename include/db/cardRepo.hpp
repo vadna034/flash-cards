@@ -4,7 +4,7 @@
 #include <vector>
 #include <optional>
 #include "card.hpp"
-#include "../../src/db/internal/db.hpp"
+#include "db/internal/db.hpp"
 
 /**
  * Repository for performing CRUD operations on the Card table.

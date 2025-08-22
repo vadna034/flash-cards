@@ -14,8 +14,25 @@ SOURCES   := $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*/*.cpp) $(wildc
 OBJS      := $(SOURCES:.cpp=.o)
 DEPS      := $(OBJS:.o=.d)
 
+
+# Allow overriding (e.g., make BEAR=compiledb compile_commands.json)
+BEAR ?= bear
+
+# Files that, if changed, should trigger a re-gen of compile_commands.json
+COMPILE_DB_DEPS := $(SOURCES) $(wildcard $(INC_DIR)/**/*.hpp) Makefile
+
 .PHONY: all clean
 all: $(TARGET)
+
+.PHONY: compile_commands.json
+compile_commands.json: $(COMPILE_DB_DEPS)
+	@echo "Rebuilding compile_commands.json with $(BEAR)…"
+	# Force a rebuild so $(BEAR) can record all compile commands
+	$(BEAR) -- make -B -j
+
+.PHONY: clean-compile-db
+clean-compile-db:
+	rm -f compile_commands.json
 
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $@ $(LDLIBS)
