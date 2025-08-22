@@ -1,10 +1,10 @@
 #include <iostream>
 #include <sqlite3.h>
 
-#include "src/db/card.hpp"
-#include "src/db/cardRepo.hpp"
-#include "src/db/collection.hpp"
-#include "src/db/collectionRepo.hpp"
+#include "db/card.hpp"
+#include "db/cardRepo.hpp"
+#include "db/collection.hpp"
+#include "db/collectionRepo.hpp"
 
 int main(){
     sqlite3 *db;

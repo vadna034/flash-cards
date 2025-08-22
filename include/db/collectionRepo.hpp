@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "internal/db.hpp"
+#include "../../src/db/internal/db.hpp"
 #include "collection.hpp"
 
 /**

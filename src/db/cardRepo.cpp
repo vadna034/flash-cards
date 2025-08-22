@@ -1,4 +1,4 @@
-#include "cardRepo.hpp"
+#include "db/cardRepo.hpp"
 #include "internal/statement.hpp"
 
 CardRepo::CardRepo(Db &db) : db_(db) {}

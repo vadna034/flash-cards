@@ -1,6 +1,6 @@
 #pragma once
 
-#include "internal/db.hpp"
+#include "../../src/db/internal/db.hpp"
 
 /**
  * RAII wrapper for a SQLite transaction.
