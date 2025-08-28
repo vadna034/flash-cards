@@ -1,24 +1,19 @@
 #include <iostream>
 #include <sqlite3.h>
 
-#include "db/card.hpp"
 #include "db/cardRepo.hpp"
-#include "db/collection.hpp"
 #include "db/collectionRepo.hpp"
+#include "db/internal/db.hpp"
 
 int main(){
-    sqlite3 *db;
-    int rc = sqlite3_open("carddata.db", &db);
+    const Db db("flashcards.db");
+    db.applyMigrations();
 
-    if(rc == SQLITE_OK){
-        std::string errorMessage = "Error opening the database: quitting";
-        std::cerr << errorMessage << std::endl;
-        return -1;
-    }
+    const CardRepo cardRepo(db);
+    const CollectionRepo collectionRepo(db);
+    auto res = collectionRepo.childrenOf(std::nullopt);
 
-    char* zErrMsg = 0;
-    //const char* sql = "CREATE TABLE CARDS)
 
-    sqlite3_close(db);
+
     return 0;
 }
