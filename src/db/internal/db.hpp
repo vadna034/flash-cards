@@ -51,7 +51,7 @@ public:
    *
    * @throws DBError if execution fails (syntax error, constraint violation, disk I/O, etc.).
    */
-  void exec(const std::string &sql);
+  void exec(const std::string &sql) const;
 
   /**
    * Accessor for the raw sqlite3* handle.
@@ -61,4 +61,6 @@ public:
    * @return sqlite3* pointer owned by this Db instance.
    */
   sqlite3 *raw() const;
+
+  void applyMigrations() const;
 };

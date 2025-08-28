@@ -18,7 +18,7 @@ Db::~Db() {
   }
 }
 
-void Db::exec(const std::string &sql) {
+void Db::exec(const std::string &sql) const {
     throwOnExec(db_, sql);
 }
 

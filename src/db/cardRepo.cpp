@@ -3,7 +3,7 @@
 
 CardRepo::CardRepo(Db &db) : db_(db) {}
 
-std::optional<Card> CardRepo::get(const std::string &id) {
+std::optional<Card> CardRepo::get(const std::string &id) const {
   Statement s(db_.raw(),
               "SELECT id,collection_id,front,back FROM Card WHERE id=?1");
   s.bind(1, id);
@@ -13,7 +13,7 @@ std::optional<Card> CardRepo::get(const std::string &id) {
   return std::nullopt;
 }
 
-void CardRepo::create(const Card &c) {
+void CardRepo::create(const Card &c) const {
   Statement s(
       db_.raw(),
       "INSERT INTO Card(id,collection_id,front,back) VALUES(?1,?2,?3,?4)");
@@ -24,7 +24,7 @@ void CardRepo::create(const Card &c) {
   s.step();
 }
 
-std::vector<Card> CardRepo::listByCollection(const std::string &collectionId) {
+std::vector<Card> CardRepo::listByCollection(const std::string &collectionId) const {
   Statement s(
       db_.raw(),
       "SELECT id,collection_id,front,back FROM Card WHERE collection_id=?1");
@@ -37,7 +37,7 @@ std::vector<Card> CardRepo::listByCollection(const std::string &collectionId) {
 }
 
 void CardRepo::updateFrontBack(const std::string &id, const std::string &front,
-                               const std::string &back) {
+                               const std::string &back) const {
   Statement s(db_.raw(), "UPDATE Card SET front=?1, back=?2 WHERE id=?3");
   s.bind(1, front);
   s.bind(2, back);
@@ -45,7 +45,7 @@ void CardRepo::updateFrontBack(const std::string &id, const std::string &front,
   s.step();
 }
 
-void CardRepo::remove(const std::string &id) {
+void CardRepo::remove(const std::string &id) const {
   Statement s(db_.raw(), "DELETE FROM Card WHERE id=?1");
   s.bind(1, id);
   s.step();

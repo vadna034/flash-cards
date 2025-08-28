@@ -39,14 +39,14 @@ public:
    *
    * @throws DBError if binding fails (e.g., invalid index, OOM).
    */
-  void bind(int idx, const std::string &v); 
+  void bind(int idx, const std::string &v) const; 
 
   /**
    * Bind a SQL NULL to 1-based parameter index `idx`.
    *
    * @throws DBError if binding fails (e.g., invalid index).
    */
-  void bind(int idx, std::nullptr_t); 
+  void bind(int idx, std::nullptr_t) const; 
 
   /**
    * Advance the statement execution.
@@ -63,7 +63,7 @@ public:
    * @throws DBError if SQLite reports an error (e.g., constraint violation,
    *                 misuse, disk I/O, database locked).
    */
-  bool step(); 
+  bool step() const; 
 
   /**
    * Reset the statement to its initial state, ready to be rebound and executed again.
@@ -71,7 +71,7 @@ public:
    *
    * @throws DBError if reset/clear_bindings fails (rare; e.g., OOM).
    */
-  void reset(); 
+  void reset() const; 
 
   /**
    * Get column `i` as a std::string.

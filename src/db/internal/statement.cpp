@@ -13,17 +13,17 @@ Statement::~Statement() {
     sqlite3_finalize(statement_);
 }
 
-void Statement::bind(int idx, const std::string &v) {
+void Statement::bind(int idx, const std::string &v) const {
   throwOnSqlite(
       sqlite3_bind_text(statement_, idx, v.c_str(), -1, SQLITE_TRANSIENT), db_,
       "bind_text");
 }
 
-void Statement::bind(int idx, std::nullptr_t) {
+void Statement::bind(int idx, std::nullptr_t) const {
   throwOnSqlite(sqlite3_bind_null(statement_, idx), db_, "bind_null");
 }
 
-bool Statement::step() {
+bool Statement::step() const{
   int rc = sqlite3_step(statement_);
   if (rc == SQLITE_ROW) {
     return true;
@@ -35,7 +35,7 @@ bool Statement::step() {
   return false;
 }
 
-void Statement::reset() {
+void Statement::reset() const {
   throwOnSqlite(sqlite3_reset(statement_), db_, "reset");
   throwOnSqlite(sqlite3_clear_bindings(statement_), db_, "clear_bindings");
 }

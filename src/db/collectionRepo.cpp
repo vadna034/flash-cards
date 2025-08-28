@@ -4,7 +4,7 @@
 
 CollectionRepo::CollectionRepo(Db &db) : db_(db) {}
 
-std::optional<Collection> CollectionRepo::get(const std::string &id) {
+std::optional<Collection> CollectionRepo::get(const std::string &id) const{
   Statement s(db_.raw(), "SELECT id,name,node_type,parent_collection FROM "
                          "Collection WHERE id=?1");
   s.bind(1, id);
@@ -18,7 +18,7 @@ std::optional<Collection> CollectionRepo::get(const std::string &id) {
   return std::nullopt;
 }
 
-void CollectionRepo::create(const Collection &c) {
+void CollectionRepo::create(const Collection &c) const{
   Statement s(db_.raw(),
               "INSERT INTO Collection(id,name,node_type,parent_collection) "
               "VALUES(?1,?2,?3,?4)");
@@ -33,7 +33,7 @@ void CollectionRepo::create(const Collection &c) {
   s.step();
 }
 
-std::vector<Collection> CollectionRepo::childrenOf(const std::string &id) {
+std::vector<Collection> CollectionRepo::childrenOf(const std::string &id) const {
   Statement s(db_.raw(), "SELECT id,name,node_type,parent_collection FROM "
                          "Collection WHERE parent_collection=?1");
   s.bind(1, id);
@@ -50,7 +50,7 @@ std::vector<Collection> CollectionRepo::childrenOf(const std::string &id) {
 }
 
 void CollectionRepo::move(const std::string &id,
-                          const std::optional<std::string> &newParent) {
+                          const std::optional<std::string> &newParent) const{
   Statement s(db_.raw(),
               "UPDATE Collection SET parent_collection=?1 WHERE id=?2");
   if (newParent) {
@@ -63,7 +63,7 @@ void CollectionRepo::move(const std::string &id,
   s.step();
 }
 
-void CollectionRepo::remove(const std::string &id) {
+void CollectionRepo::remove(const std::string &id) const{
   Statement s(db_.raw(), "DELETE FROM Collection WHERE id=?1");
   s.bind(1, id);
   s.step();
