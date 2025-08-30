@@ -1,6 +1,6 @@
 *.d
 *.o
-*.db
+*.db*
 *.drawio*
 
 main
