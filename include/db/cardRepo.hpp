@@ -13,13 +13,13 @@
  * reports a failure (constraint violation, I/O error, misuse, etc.).
  */
 class CardRepo {
-  const Db &db_;
+  Db &db_;
 
 public:
   /**
    * Construct repository bound to a Db connection.
    */
-  explicit CardRepo(const Db &db);
+  explicit CardRepo(Db &db);
 
   /**
    * Retrieve a card by id.

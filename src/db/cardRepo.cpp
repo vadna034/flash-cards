@@ -1,7 +1,7 @@
 #include "db/cardRepo.hpp"
 #include "internal/statement.hpp"
 
-CardRepo::CardRepo(const Db &db) : db_(db) {}
+CardRepo::CardRepo(Db &db) : db_(db) {}
 
 std::optional<Card> CardRepo::get(const std::string &id) const {
   Statement s(db_.raw(),
@@ -17,7 +17,7 @@ void CardRepo::create(const Card &c) const {
   Statement s(
       db_.raw(),
       "INSERT INTO Card(id,collection_id,front,back) VALUES(?1,?2,?3,?4)");
-  s.bind(1, nullptr); // bind null to take advantage of auto incrementing id
+  s.bind(1, c.id);
   s.bind(2, c.collection_id);
   s.bind(3, c.front);
   s.bind(4, c.back);

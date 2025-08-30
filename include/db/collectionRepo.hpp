@@ -20,13 +20,13 @@
  *    triggers/closure table).
  */
 class CollectionRepo {
-  const Db &db_;
+  Db &db_;
 
 public:
   /**
    * Construct a repository bound to a Db connection.
    */
-  explicit CollectionRepo(const Db &db);
+  explicit CollectionRepo(Db &db);
 
   /**
    * Retrieve a collection by id.
@@ -57,7 +57,7 @@ public:
    *
    * @throws DBError if query execution fails.
    */
-  std::vector<Collection> childrenOf(const std::optional<std::string> &id) const; 
+  std::vector<Collection> childrenOf(const std::string &id) const; 
 
   /**
    * Move a collection to a new parent (or root).

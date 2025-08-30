@@ -2,27 +2,24 @@
 #include <ncurses.h>
 #include <sqlite3.h>
 
+#include "db/card.hpp"
 #include "db/cardRepo.hpp"
-#include "db/collectionRepo.hpp"
 #include "db/collection.hpp"
-#include "db/internal/db.hpp"
+#include "db/collectionRepo.hpp"
 
-int main() {
-  const Db db("flashcards.db");
-  db.applyMigrations();
+int main(){
+    sqlite3 *db;
+    int rc = sqlite3_open("carddata.db", &db);
 
-  const CardRepo cardRepo(db);
-  const CollectionRepo collectionRepo(db);
+    if(rc == SQLITE_OK){
+        std::string errorMessage = "Error opening the database: quitting";
+        std::cerr << errorMessage << std::endl;
+        return -1;
+    }
 
-  Collection* currentCollection = nullptr;
-  std::optional<std::string> currentCollectionId = currentCollection == nullptr ? std::nullopt : std::make_optional(currentCollection->id);
-  auto res = collectionRepo.childrenOf(currentCollectionId);
+    char* zErrMsg = 0;
+    //const char* sql = "CREATE TABLE CARDS)
 
-  initscr();
-  printw("hello world !!!");
-  refresh();
-  getch();
-  endwin();
-
-  return 0;
+    sqlite3_close(db);
+    return 0;
 }
