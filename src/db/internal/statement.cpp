@@ -1,5 +1,6 @@
 #include "statement.hpp"
 #include "errors.hpp"
+#include "db/internal/db.hpp"
 
 Statement::Statement(sqlite3 *db, const std::string &statementString)
     : db_(db) {
@@ -17,6 +18,10 @@ void Statement::bind(int idx, const std::string &v) const {
   throwOnSqlite(
       sqlite3_bind_text(statement_, idx, v.c_str(), -1, SQLITE_TRANSIENT), db_,
       "bind_text");
+}
+
+void Statement::bind(int idx, int64_t v) const {
+  throwOnSqlite(sqlite3_bind_int64(statement_, idx, v), db_, "bind_int64");
 }
 
 void Statement::bind(int idx, std::nullptr_t) const {
@@ -46,4 +51,12 @@ const unsigned char *Statement::col_text(int i) const {
 std::string Statement::col_string(int i) const {
   const unsigned char *t = col_text(i);
   return t ? std::string(reinterpret_cast<const char *>(t)) : std::string();
+}
+
+int64_t Statement::col_int64(int i) const {
+  return sqlite3_column_int64(statement_, i);
+}
+
+sqlite3_stmt* Statement::raw() const {
+    return statement_;
 }

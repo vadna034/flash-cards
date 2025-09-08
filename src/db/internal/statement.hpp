@@ -5,18 +5,20 @@
 
 /**
  * RAII wrapper around sqlite3 prepared statements.
- * 
+ *
  * Notes:
  *  - Bind parameter indices are **1-based**, matching SQLite's API.
  *  - For non-SELECT statements (INSERT/UPDATE/DELETE), call step() **once**.
- *  - For SELECT queries, iterate rows with `while (step()) { ... }` until it returns false.
+ *  - For SELECT queries, iterate rows with `while (step()) { ... }` until it
+ * returns false.
  */
 class Statement {
   sqlite3_stmt *statement_{nullptr};
   sqlite3 *db_{nullptr};
 
-  /** Returns raw UTF-8 text pointer for column i (may be nullptr). Never throws. */
-  const unsigned char *col_text(int i) const; 
+  /** Returns raw UTF-8 text pointer for column i (may be nullptr). Never
+   * throws. */
+  const unsigned char *col_text(int i) const;
 
 public:
   /**
@@ -27,26 +29,33 @@ public:
    *
    * @throws DBError on prepare failure (e.g., SQL syntax error, OOM).
    */
-  Statement(sqlite3 *db, const std::string &statementString); 
+  Statement(sqlite3 *db, const std::string &statementString);
 
   /**
    * Finalizes the prepared statement (sqlite3_finalize). Never throws.
    */
-  ~Statement(); 
+  ~Statement();
 
   /**
    * Bind a UTF-8 text value to 1-based parameter index `idx`.
    *
    * @throws DBError if binding fails (e.g., invalid index, OOM).
    */
-  void bind(int idx, const std::string &v) const; 
+  void bind(int idx, const std::string &v) const;
+
+  /**
+   * Bind a 64 bit integer to 1-based parameter index `idx`
+   *
+   * @throws DBError if binding fails
+   */
+  void bind(int idx, int64_t v) const;
 
   /**
    * Bind a SQL NULL to 1-based parameter index `idx`.
    *
    * @throws DBError if binding fails (e.g., invalid index).
    */
-  void bind(int idx, std::nullptr_t) const; 
+  void bind(int idx, std::nullptr_t) const;
 
   /**
    * Advance the statement execution.
@@ -63,24 +72,37 @@ public:
    * @throws DBError if SQLite reports an error (e.g., constraint violation,
    *                 misuse, disk I/O, database locked).
    */
-  bool step() const; 
+  bool step() const;
 
   /**
-   * Reset the statement to its initial state, ready to be rebound and executed again.
-   * Also clears all previous bindings.
+   * Reset the statement to its initial state, ready to be rebound and executed
+   * again. Also clears all previous bindings.
    *
    * @throws DBError if reset/clear_bindings fails (rare; e.g., OOM).
    */
-  void reset() const; 
+  void reset() const;
 
   /**
    * Get column `i` as a std::string.
    *
    * Behavior:
    *  - Returns an empty string if the column is NULL.
-   *  - Copies the text (so it remains valid after the next step/reset/finalize).
-   *
-   * @throws no exceptions.
+   *  - Copies the text (so it remains valid after the next
+   * step/reset/finalize).
    */
-  std::string col_string(int i) const; 
+  std::string col_string(int i) const;
+
+  /**
+   * Get column `i` as a int64_t
+   */
+  int64_t col_int64(int i) const;
+
+  /**
+   * Accessor for the raw sqlite3* handle.
+   *
+   * This is primarily for internal use (e.g., to pass to Statement).
+   *
+   * @return sqlite3* pointer owned by this Db instance.
+   */
+  sqlite3_stmt *raw() const;
 };

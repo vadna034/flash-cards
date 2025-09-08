@@ -3,8 +3,8 @@
 #include <string>
 
 struct Card {
-  std::string id;
-  std::string collection_id;
+  int64_t id;
+  int64_t collection_id;
   std::string front;
   std::string back;
 };

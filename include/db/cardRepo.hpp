@@ -29,7 +29,7 @@ public:
    *
    * @throws DBError if SQLite execution fails (I/O, locked database, etc.).
    */
-  std::optional<Card> get(const std::string &id) const;
+  std::optional<Card> get(int64_t id) const;
 
   /**
    * Insert a new card.
@@ -48,7 +48,7 @@ public:
    *
    * @throws DBError if query execution fails.
    */
-  std::vector<Card> listByCollection(const std::string &collectionId) const;
+  std::vector<Card> listByCollection(int64_t collectionId) const;
 
   /**
    * Update both front and back text of an existing card.
@@ -59,7 +59,7 @@ public:
    *
    * @throws DBError if update fails (constraint violation, missing row, I/O).
    */
-  void updateFrontBack(const std::string &id, const std::string &front, const std::string &back) const;
+  void updateFrontBack(int64_t id, const std::string &front, const std::string &back) const;
 
   /**
    * Delete a card by id.
@@ -68,6 +68,6 @@ public:
    *
    * @throws DBError if deletion fails (I/O, locked database, etc.).
    */
-  void remove(const std::string &id) const;
+  void remove(int64_t id) const;
 };
 

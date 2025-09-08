@@ -1,13 +1,14 @@
 #pragma once
 
+#include <cstdint>
 #include <optional>
 #include <string>
 
 struct Collection {
-  std::string id;
+  int64_t id;
   std::string name;
   std::string node_type;
-  std::optional<std::string> parent_id;
+  std::optional<int64_t> parent_id;
 };
 
 

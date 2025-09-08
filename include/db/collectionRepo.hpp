@@ -36,7 +36,7 @@ public:
    *
    * @throws DBError on SQLite execution errors.
    */
-  std::optional<Collection> get(const std::string &id) const; 
+  std::optional<Collection> get(int64_t collectionId) const; 
 
   /**
    * Insert a new collection.
@@ -57,7 +57,7 @@ public:
    *
    * @throws DBError if query execution fails.
    */
-  std::vector<Collection> childrenOf(const std::string &id) const; 
+  std::vector<Collection> childrenOf(int64_t parentId) const; 
 
   /**
    * Move a collection to a new parent (or root).
@@ -70,7 +70,7 @@ public:
    *          enforces it (e.g., via triggers/closure table). Consider adding
    *          application-level checks if needed.
    */
-  void move(const std::string &id, const std::optional<std::string> &newParent) const; 
+  void move(int64_t id, const std::optional<std::string> &newParent) const; 
 
   /**
    * Delete a collection by id.
@@ -85,5 +85,5 @@ public:
    *
    * @throws DBError if deletion fails (FK violation, I/O error, etc.).
    */
-  void remove(const std::string &id) const; 
+  void remove(int64_t id) const; 
 };

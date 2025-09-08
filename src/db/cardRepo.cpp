@@ -3,12 +3,12 @@
 
 CardRepo::CardRepo(Db &db) : db_(db) {}
 
-std::optional<Card> CardRepo::get(const std::string &id) const {
+std::optional<Card> CardRepo::get(int64_t id) const {
   Statement s(db_.raw(),
               "SELECT id,collection_id,front,back FROM Card WHERE id=?1");
   s.bind(1, id);
   if (s.step())
-    return Card{s.col_string(0), s.col_string(1), s.col_string(2),
+    return Card{s.col_int64(0), s.col_int64(1), s.col_string(2),
                 s.col_string(3)};
   return std::nullopt;
 }
@@ -24,7 +24,7 @@ void CardRepo::create(const Card &c) const {
   s.step();
 }
 
-std::vector<Card> CardRepo::listByCollection(const std::string &collectionId) const {
+std::vector<Card> CardRepo::listByCollection(int64_t collectionId) const {
   Statement s(
       db_.raw(),
       "SELECT id,collection_id,front,back FROM Card WHERE collection_id=?1");
@@ -32,11 +32,11 @@ std::vector<Card> CardRepo::listByCollection(const std::string &collectionId) co
   std::vector<Card> out;
   while (s.step())
     out.push_back(
-        {s.col_string(0), s.col_string(1), s.col_string(2), s.col_string(3)});
+        {s.col_int64(0), s.col_int64(1), s.col_string(2), s.col_string(3)});
   return out;
 }
 
-void CardRepo::updateFrontBack(const std::string &id, const std::string &front,
+void CardRepo::updateFrontBack(int64_t id, const std::string &front,
                                const std::string &back) const {
   Statement s(db_.raw(), "UPDATE Card SET front=?1, back=?2 WHERE id=?3");
   s.bind(1, front);
@@ -45,7 +45,7 @@ void CardRepo::updateFrontBack(const std::string &id, const std::string &front,
   s.step();
 }
 
-void CardRepo::remove(const std::string &id) const {
+void CardRepo::remove(int64_t id) const {
   Statement s(db_.raw(), "DELETE FROM Card WHERE id=?1");
   s.bind(1, id);
   s.step();
